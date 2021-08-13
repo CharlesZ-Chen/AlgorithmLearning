@@ -58,6 +58,39 @@ void dfs(graph) {
   }
 }
 ```
+
+### Backtracing
+
+Essentialy, it is DFS in a recursive fasion.
+
+```java
+void backtracking(<global state>, <Search Space>, <Prune Flag>, <Level Flag>) {
+  if (Level Flag reach max) {
+    return;
+  }
+
+  if (Find targeted state) {
+    record in global state
+    return;
+  }
+
+  for (node in Search Space) {
+    if (Prune Flag) {
+      continue;
+    }
+
+    // Prepare next level search
+    backtracking(...)
+    // Roll back as needed
+  }
+}
+```
+
+- leetcode questions:
+  - https://leetcode.com/problems/combination-sum/
+  - https://leetcode.com/problems/combination-sum-ii/
+  - https://leetcode.com/problems/combination-sum-iii/
+
 ## BFS
 
 ```java
@@ -81,8 +114,6 @@ void bfs(graph) {
   }
 }
 ```
-
-## Backtracing
 
 
 ## Binary Search
