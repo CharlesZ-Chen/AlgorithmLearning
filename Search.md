@@ -91,6 +91,24 @@ void backtracking(<global state>, <Search Space>, <Prune Flag>, <Level Flag>) {
   - https://leetcode.com/problems/combination-sum-ii/
   - https://leetcode.com/problems/combination-sum-iii/``
 
+- ** Gotchas **:
+ - Avoid passing mutable/shared states in recursive backtracking function. Backtrack condition is tricky to write correct in this case.
+
+ For example ([word search ii](https://leetcode.com/problems/word-search-ii/)):
+
+ Passing an immutable TrieNode reference to represent current searching string:
+ ```
+  public void dfs(List<String> result, int row, int col, Trie.TrieNode preNode) {
+ ```
+
+ is better than passing & maintaining a StringBuffer to represent current searching string:
+
+ ```
+ public void dfs(List<String> result, int row, int col, StringBuffer curStr)
+ ```
+
+ As the formmer do not need to worry about backtrack the TrieNode reference, while the latter need to take care of backtrack/reset StringBuffer to a correct state for every function exist point.
+
 ## BFS
 
 ```java
@@ -115,7 +133,5 @@ void bfs(graph) {
 }
 ```
 
-
 ## Binary Search
-
 
