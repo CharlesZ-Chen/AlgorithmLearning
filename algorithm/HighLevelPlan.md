@@ -5,6 +5,7 @@
   - Hash Table
   - Stack
   - Queue
+  - TODO: Heap
 
 - Java Common Collections
   - HashMap, TreeMap
@@ -17,10 +18,3 @@
 
 - Math
  - Arrangement & Permutations
- -
-
-
- ### Targeted Companies
-
- - 
-
