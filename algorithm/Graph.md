@@ -31,4 +31,8 @@
 #### Undirected Graph
 
 - Check "strongly connected components" in a graph
- - tarjan's algorithm (check end depth for each dfs path) 
+ - tarjan's algorithm (check end depth for each dfs path)
+
+### Graph Formulation (How to modeling graphs)
+
+- https://leetcode.com/problems/regions-cut-by-slashes/

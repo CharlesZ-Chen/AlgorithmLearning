@@ -59,7 +59,7 @@ void dfs(graph) {
 }
 ```
 
-### Backtracing
+### Backtracking
 
 Essentialy, it is DFS in a recursive fasion.
 
@@ -91,8 +91,11 @@ void backtracking(<global state>, <Search Space>, <Prune Flag>, <Level Flag>) {
   - https://leetcode.com/problems/combination-sum-ii/
   - https://leetcode.com/problems/combination-sum-iii/``
 
+- Apply backtracking in blindfold/interactive env:
+  - https://leetcode.com/problems/robot-room-cleaner/
+
 - ** Gotchas **:
- - Avoid passing mutable/shared states in recursive backtracking function. Backtrack condition is tricky to write correct in this case.
+ - **Avoid** passing **mutable/shared states** in recursive backtracking function. Backtrack condition is tricky to write correct in this case.
 
  For example ([word search ii](https://leetcode.com/problems/word-search-ii/)):
 
@@ -132,6 +135,42 @@ void bfs(graph) {
   }
 }
 ```
+
+### BFS Visiting Strategy
+
+
+```java
+// [Not Recommended] Visited Marking Strategy A
+while(!queue.isEmpty()) {
+    cur = queue.poll();
+    visited.add(cur);
+
+    for(next : cur.nexts) {
+      if(!visited.contains(next)) {
+        queue.offer(next);
+      }
+    }
+}
+
+
+// [Preferred] Visited Marking Strategy B
+queue.add(start);
+visited.add(start);
+while(!queue.isEmpty()) {
+  cur = queue.poll();
+
+  for(next : cur.nexts) {
+    if(!visited.contains(next)) {
+      queue.offer(next);
+      visited.add(next);
+    }
+  }
+}
+```
+
+B will prune paths at the same level where there is already a path can visit the same visiting state.
+Practically, B can search much lesser than A, for a optimal searching problem. (though A & B has the same Big O complexity).
+
 
 ## Binary Search
 
