@@ -70,8 +70,8 @@
 
 ##### Failover is fraught with things that can go wrong
 
+
 - How to handle async replications? E.g. those async writes havn't updated to followers, when a leader failed and a new leader promoted
-  - 
 
 - Simple discard async writes can be dangerous if other storage systems need to be coordinated with DB contents.
   - https://github.blog/2012-09-14-github-availability-this-week/
