@@ -48,6 +48,7 @@
 - copy the snapshot to the new follower
 
 - request all changes since snapshot from the leader
+  - This requires the snapshot is associated with an exact position in the leader's replication log.
 
 ### Handling Node Outages
 
