@@ -1,3 +1,7 @@
+### Reference
+
+https://oi-wiki.org/basic/sort-intro/
+
 ### Sorting Properties
 
 - Stablility: if elements with equal value can kept their relative order in original input, after sorting

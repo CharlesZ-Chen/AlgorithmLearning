@@ -36,3 +36,5 @@
 ### Graph Formulation (How to modeling graphs)
 
 - https://leetcode.com/problems/regions-cut-by-slashes/
+- https://leetcode.com/problems/alien-dictionary/
+

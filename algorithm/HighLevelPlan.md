@@ -6,6 +6,7 @@
   - Stack
   - Queue
   - TODO: Heap
+  - sorting algorithms
 
 - Java Common Collections
   - HashMap, TreeMap
