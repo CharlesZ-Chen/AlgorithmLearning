@@ -192,6 +192,56 @@ Solution:
 #### Read repair and anti-entropy
 
 
+### Sloppy Quorums and Hinted Handoff
+
+Situation: in a large cluster, client can connect to some nodes, but lost connection to the dedicated `w` or `r` nodes during network interruption.
+
+**Sloppy Quorum**: accept writes anyways, and write them to some temp nodes that not the dedicated `w` nodes, and handoff to the dedicated `w` nodes once network recovered.
+ - Use case: Increasing write availability.
+ - Side effect: quorum formula `w + r > n` no longer ensure latest value for a key will always been successfully read. (as some writes may temp outside of `n` nodes).
+
+**Hinted handoff**: writes that accepted by temp nodes send to appropriate "homw" nodes once network fixed.
+
+
+### Detecting Concurrent Writes
+
+Situation: Events may arrive in a different order at different nodes.
+
+Result: Database may becomes permanent inconsistent (e.g. for write events set(A), set(B) -- B may arrive as the later write at some nodes, while other nodes have A as the later write.)
+
+Solution Handling write conflicts:
+
+- Last write wins (discarding concurrent writes)
+
+Idea: enforce an arbitrary order on the events (e.g. by timestamp) -- so that we can discard "older" one by overwrite it with "recent" one.
+
+- Side effect: reduce durability. For multiple conccurent writes to the same key, client may recieve multiple uccessful ack but only 1 of the write is actually persisted. (with other silently discarded).
+
+- To avoid lost of durability: make sure each key only **write once** (i.e. keys treated as immutable after first write).
+
+#### The "happens-before" relationship and concurrency
+
+Definition: An operation A **happens before** another operation B if: 1) B knows about A 2) depends on A 3) builds upon A in some way.
+
+#### Capturing the happens-before relationship
+
+- server maintains a version number for every key. Increments the version number every time that key is written, and store with the written value with the new version number.
+
+- When a client reads a key, the server returns all values that have not been overr-wrriten, as well as the latest version nubmer. A client must read a key before writing.
+  - Over-written: if a version represents a prior write in a happens-before relationship (e.g. a more recent version built/write upon this version), then this version has been over-written.
+
+- When a client writes a key, it must include the version number from the prior read, and it must merge together all values that it recieved in the prior read.
+
+- When the server recieves a write with a particular version number, it can over-write all values with that version number or below, but it must keep all values with a higher version number.
+
+Note: When a write includes the version number from a prior read, that tells us which previous state the write is based on.
+
+Client-side merging: things may get tricker if "removal" are allowed (so that in shopping cart example, simply take "union" as the merge conflict solution may not work as expected -- may require a "deletion marker" to prevent re-add a removed element back (e.g. element removed in 1 sibling, but persist in other sibling(s) which result union adds it back.)
+
+**Scale to multiple write replicas**: instead a single version number, let each write replica maintain its own incremental version number, with the collection of version numbers of all replicas act as a **version vector** (to indicate which values to overwrite and which values to keep as siblings).
+
+
+
 
 
 
