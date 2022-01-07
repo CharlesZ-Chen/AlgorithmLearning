@@ -6,6 +6,7 @@
 - Can you share some growth metrics?
 - What are some types of people you will never hire?
 - What are some gaps in your skillset?
+
 问head of eng的：. 1point3acres
 - What are some of the plans the eng org has for the next 6 months?
 - How's your tech debt situation? (tech debt肯定有，主要看ta对tech debt的态度)
