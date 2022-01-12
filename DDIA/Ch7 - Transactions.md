@@ -27,3 +27,4 @@ In practice, Serializability is a database property with high performance cost, 
 
 **Durability** promise that once a transaction has commmitted successfully, any data it has written will not be forgotten, even if database crashed.
 
+## Single-Object and Multi-Object Operations
