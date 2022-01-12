@@ -1,4 +1,4 @@
-### Handling Changes for data replication
+## Handling Changes for data replication
 
 - single-leader
 
@@ -6,7 +6,7 @@
 
 - leaderless
 
-### Leaders and Followers
+## Leaders and Followers
 
 - Replica: a node stores a copy of the database
 
@@ -17,7 +17,7 @@
   - applying all writes in the same order as were processed in the Leader
 
 
-### Sync / Async Replication
+## Sync / Async Replication
 
 - Synchronous Replication:
    - Leader Ack to Client once all sync followers updated sucessfully
@@ -41,7 +41,7 @@
 
 - TODO: Chain Replication
 
-### Setting Up New Followers
+## Setting Up New Followers
 
 - take a consistent snapshot of the leader's database
 
@@ -50,13 +50,13 @@
 - request all changes since snapshot from the leader
   - This requires the snapshot is associated with an exact position in the leader's replication log.
 
-### Handling Node Outages
+## Handling Node Outages
 
-#### Follower failure: Catch-up recovery
+### Follower failure: Catch-up recovery
 
 - Similar to setting up new followers, except that follower first recover from its disk log. Then caught up with leader.
 
-#### Leader failure: Failover
+### Leader failure: Failover
 
 - Determining leader failure: E.g. hearbeat timeout
 
@@ -68,7 +68,7 @@
   - step down old leader to a follower when its back
 
 
-##### Failover is fraught with things that can go wrong
+#### Failover is fraught with things that can go wrong
 
 
 - How to handle async replications? E.g. those async writes havn't updated to followers, when a leader failed and a new leader promoted
@@ -78,9 +78,9 @@
 
 - Split Brain problem: two nodes both believes that they are the leader
 
-### Implementation of Replication Logs
+## Implementation of Replication Logs
 
-#### Statement-based Replication
+### Statement-based Replication
 
 Leader logs every write request (statement). Then send statement logs to followers for a replay.
 
@@ -89,7 +89,7 @@ Leader logs every write request (statement). Then send statement logs to followe
   - Tricky to handle statements that relies on existed data in database (e.g. autoincrementing column)
   - Statements that has side effects are tricky to handle (unless they 100% deterministic)
 
-#### Write-Ahead Log (WAP) shipping
+### Write-Ahead Log (WAP) shipping
 
 Log is an append-only sequence of bytes containing all writes to the database.
 
@@ -98,17 +98,17 @@ Log is an append-only sequence of bytes containing all writes to the database.
   - Make replication couples with storage engine
 
 
-#### Logical (row) based Replication
+### Logical (row) based Replication
 
 
-#### Trigger-based Replication
+### Trigger-based Replication
 
-### Problems with Replication Lag
+## Problems with Replication Lag
 
 Sync replication does not work well practically (a single follower failure blocks the entire system); However async replications introduces issues when replication lag between leaders and followers are significant enough to be a real rather than theoratical issue.
 
 
-#### Reading Your Own Writes
+### Reading Your Own Writes
 
 Guarantee that user will always reads their own writes (but no guarantee for other's writes). Some solutions:
 
@@ -122,14 +122,14 @@ Guarantee that user will always reads their own writes (but no guarantee for oth
 - If multiple data centers involved: any requests that needs to be serveed by the leader must be routed to the datacenter contains the leader.
 
 
-##### Cross-device Read-your-own Writes
+#### Cross-device Read-your-own Writes
 
 - client timestamp (consistency token) approach becomes more difficult. Now needs to centralize this metadata cross devices.
 
 - If replicas distributed to different datacenters, need to route requests from all of a user's devices to the same datacenters.
 
 
-#### Monotonic Reads
+### Monotonic Reads
 
 It's possible for a user to see things moving backward in time.
 
@@ -143,7 +143,7 @@ A possible solution:
  - Cons: if a replica fails, user requests will need to reroute to another replica (**?? how to ensure Monotonic Read in this case?**)
 
 
-#### Consistent Prefix Reads
+### Consistent Prefix Reads
 
 Ensure no violation of causality (cause and effect). I.e. if a sequence of writes occurs in a certain order, guarantee that anyone reading these writes will see them appear in the same order.
 
@@ -154,20 +154,20 @@ A possible solution:
  - Follow up: "The 'happens-before' relationship and concurrency"
 
 
-### Multi-Leader Replication
+## Multi-Leader Replication
 
 
-#### Handling Write Conflicts
+### Handling Write Conflicts
 
-##### Sync vs Async Conflict Detection
+#### Sync vs Async Conflict Detection
 
-##### Conflict Avoidance
+#### Conflict Avoidance
 
-##### Converging toward a Consistent State
+#### Converging toward a Consistent State
 
-##### Custom Conflict Resolution Logic
+#### Custom Conflict Resolution Logic
 
-#### Multi-Leader Replication Topologies
+### Multi-Leader Replication Topologies
 
 A **replication topology** describes the communication paths along which writes are propagated from one node to another.
 
@@ -177,9 +177,9 @@ E.g.
  - All-to-all Topology
 
 
-### Leaderless Replication
+## Leaderless Replication
 
-#### Writing to the Database When a Node Is Down
+### Writing to the Database When a Node Is Down
 
 In Leader Replicaiton, if the leader node is down during processing writes, a failover is needed.
 
@@ -189,10 +189,10 @@ Solution:
 - Write and Read to multiple replicas in parallel. Write & Read status decided by multiple responses form these replicas.
 
 
-#### Read repair and anti-entropy
+### Read repair and anti-entropy
 
 
-### Sloppy Quorums and Hinted Handoff
+## Sloppy Quorums and Hinted Handoff
 
 Situation: in a large cluster, client can connect to some nodes, but lost connection to the dedicated `w` or `r` nodes during network interruption.
 
@@ -203,7 +203,7 @@ Situation: in a large cluster, client can connect to some nodes, but lost connec
 **Hinted handoff**: writes that accepted by temp nodes send to appropriate "homw" nodes once network fixed.
 
 
-### Detecting Concurrent Writes
+## Detecting Concurrent Writes
 
 Situation: Events may arrive in a different order at different nodes.
 
@@ -219,11 +219,11 @@ Idea: enforce an arbitrary order on the events (e.g. by timestamp) -- so that we
 
 - To avoid lost of durability: make sure each key only **write once** (i.e. keys treated as immutable after first write).
 
-#### The "happens-before" relationship and concurrency
+### The "happens-before" relationship and concurrency
 
 Definition: An operation A **happens before** another operation B if: 1) B knows about A 2) depends on A 3) builds upon A in some way.
 
-#### Capturing the happens-before relationship
+### Capturing the happens-before relationship
 
 - server maintains a version number for every key. Increments the version number every time that key is written, and store with the written value with the new version number.
 
