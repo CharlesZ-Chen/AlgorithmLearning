@@ -1,11 +1,11 @@
-### Partitioning and Replication
+## Partitioning and Replication
 
-### Partitioning of Key-Value Data
+## Partitioning of Key-Value Data
 
 Goal: spread the data and the query load **evenly** across nodes.
 
 
-#### Partitioning by Key Range
+### Partitioning by Key Range
 
 Assign a continuous range of keys to each partition.
 
@@ -18,7 +18,7 @@ Cons:
 - Hotspot problem: e.g. writes may focus on a single partition (e.g. key is timestamp, and write current occuring records to the database)
 
 
-#### Partitioning by Hash of Key
+### Partitioning by Hash of Key
 
 A good hash function takes skewed data and makes it uniformly distributed.
 
@@ -29,7 +29,7 @@ Cons:
    - Compromise: Compund primary key -- first part of primary key is used for hash. Other columns used as a concatenated index for sorting data.
 
 
-#### Skewed Workloads and Relieving Hot Spots
+### Skewed Workloads and Relieving Hot Spots
 
 - Celebrity key issue: an extreme load of writes & reads to a single key, in which case that hash will not distribute load to multiple partitions.
 
@@ -40,7 +40,7 @@ Cons:
     - Hybrid approach: having another database mecahnism for hot keys. E.g. Twitter's hybrid approach of handling celebrity keys: by managing them in  Relational DB.
 
 
-#### Partitioning and Secondary Indexes
+### Partitioning and Secondary Indexes
 
 Problem of seconadry indexes on paritions: they don't quite fit into partitions (as parititions are partitioned based on primary key, already).
 
@@ -49,7 +49,7 @@ Solutions:
 - Document-based partitioning
 - Term-based partitioning
 
-##### Partitioning Secondary Indexes by Document
+#### Partitioning Secondary Indexes by Document
 
 Each partition maintains its own secondary indexes (index on document fields) -- it is a **local index** approach.
 
@@ -59,7 +59,7 @@ Cons:
  - reading may need read from all partitions then merge the result
 
 
-##### Partitioning Sceondary Indexes by Term
+#### Partitioning Sceondary Indexes by Term
 
 Construct a **global index** that covers data in all partitions, and partition this **global index** by the term (or the hash of the term).
 
@@ -73,7 +73,7 @@ Cons:
 In practice, updates to global secondary indexes are often **asynchronous**.
 
 
-#### Rebalancing Partitions
+### Rebalancing Partitions
 Motivation: Adaptive to changes like query throughout, data size grow, and infrastructure failures.
 
 Solution: rebalancing partitions by moving data arounds cross nodes.
@@ -86,13 +86,13 @@ Requirements:
 
 - minimum data movements: no more data than necessary should be moved to minimize network & disk I/O load
 
-##### Strategies for Rebalancing
+### Strategies for Rebalancing
 
-###### **Not** to do it: hash mod N
+#### **Not** to do it: hash mod N
 
 This cause moving data much more than necessary: add/remove nodes cause a re-hash on all data!
 
-###### Fixed number of partitions
+#### Fixed number of partitions
 
 Allocated a large number of partitions that are more than number of nodes in the cluster.
 
@@ -104,7 +104,7 @@ Partition is the atomic unit of rebalancing data. (similar to virtual node conce
 
 In this case, **partition size** is proportionally to the dataset size.
 
-###### Dynamic partitioning
+#### Dynamic partitioning
 
 Similar idea to fixed number of partitions on having multiple parititons on one node.
 
@@ -112,13 +112,13 @@ Now parititons are created dynamically though, with splitting if a partition gro
 
 In this case, **partition number** is proportionally to the dataset size.
 
-###### Partitioning proportinally to nodes
+#### Partitioning proportinally to nodes
 
 Make the **number of partitions** proportional to the **number of nodes**.
 
 In other words, to have a **fixed** number of partitions on each node.
 
-###### Request Routing
+#### Request Routing
 
 **ZooKeeper**!
 
