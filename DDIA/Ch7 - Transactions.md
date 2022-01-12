@@ -15,9 +15,12 @@ If the writes were grouped into transaction, then this group of writes either be
 ACID Consistency is a property of application. It describes an application-specific notion of the database is guaranteed to always hold data invariants
 (as long as application submit transactions that holds these invariants).
 
+
 #### Isolation
 
 Isolation described that concurrently execucting transcations are **isolated** to each other, i.e. they don't have dependencies to each other.
+
+For example. if one transaction makes several writes, then another transaction should see either all or none of those writes, but not some subset.
 
 A formal term of Isolation is **Serializability**, means concurrent transcations will have the same result to database as if they were executed serially.
 
