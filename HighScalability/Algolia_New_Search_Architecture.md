@@ -1,6 +1,8 @@
-#### Article
+## Article
 
-http://highscalability.com/blog/2021/8/2/evolution-of-search-engines-architecture-algolia-new-search.html
+- Part 1: http://highscalability.com/blog/2021/8/2/evolution-of-search-engines-architecture-algolia-new-search.html
+- Part 2: http://highscalability.com/blog/2021/10/11/scaling-indexing-and-search-algolia-new-search-architecture.html
+
 
 
 ## Reading Notes
@@ -54,7 +56,15 @@ Architecturally characteristics is same with sharding, additionally:
 - Multi-provider context: replicate indexing operations instead of binary files -- as the inter-provider bandwidth can be the bottleneck
   ?? **what is Multi-provider?**
 
-###
+### High Availability Of Indexing And Elasticity -- The Business Critical Area
+
+
+### Next Steps -- The Current Challenges Of Search Engines
+
+
+## Part 2
+
+### Anatomy Of An Index
   
 
 
