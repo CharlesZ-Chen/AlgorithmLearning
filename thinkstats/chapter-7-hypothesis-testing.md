@@ -11,6 +11,12 @@ An apparent **effect** is statistically significant if it is **unlikely** to hav
 - **Null hypothesis**: a model of the system based on the assumption that the apparent effect was actually due to chance
 - **p-value**: the probability of the apparent effect under the null hypothesis
 - **Interpretation**: conclusion that if the effect is either statistically signifiicant, or not
+- 
+Similarly, to test a hypothesis like, “This effect is real,” we assume, temporarily, that is is not. That’s the null hypothesis. Based on that assumption,
+we compute the probability of the apparent effect. That’s the p-value. If the p-value is low enough, we conclude that the null hypothesis is unlikely to
+be true.
+
+i.e. p-value discrebed the probabilty of observing an effect at least as extreme as the observed apparent effect -- if null hypothesis is true, we should have a high p-value (i.e. very likely to observe such an apparent effect by one time of observation), otherwise, either we observed a very un-likely apparent effect by chance, or the null-hypothesis is false.
 
 ### Testing a difference in means
 
