@@ -19,3 +19,8 @@
 
 - Math
  - Arrangement & Permutations
+
+### Advanced
+
+- KD Tree
+- Quad Tree

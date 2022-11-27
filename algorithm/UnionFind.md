@@ -26,14 +26,14 @@ define a forest, where each tree represents a sub set S, with its representive e
 
 - Find(x):
 ```
- if x.parent = x
+ if(parent[x] == x)
   return x
- return Find(x.parent)
+ return Find(parent[x])
 ```
 
 - Union(s1, s2):
 ```
- s1.parent = s2
+ parent[find(s1)] == find(s2);
 ```
 
 Pro & Cons:

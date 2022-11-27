@@ -241,7 +241,83 @@ Client-side merging: things may get tricker if "removal" are allowed (so that in
 **Scale to multiple write replicas**: instead a single version number, let each write replica maintain its own incremental version number, with the collection of version numbers of all replicas act as a **version vector** (to indicate which values to overwrite and which values to keep as siblings).
 
 
+To fix staled data on an unavailable node that comes back online:
 
+- Read Repair: client detects stale response and fix the stale replica
+
+- Anti-entropy: a background process running in each replica to detect data discrepency & fix them
+
+#### Quorums for reading and writing
+
+Quorums read and writes formula:
+
+- `w`: every write must be confirmed by `w` nodes to be considered successful
+
+- `r`: every read must be read from `r` nodes (to guarantee that at least one of `r` rodes contains the most up to date value)
+
+- `n`: total nubmer of nodes
+
+Formula: `w + r > n`
+
+- Larger `w` benefits more on write side, larger `r` benefits more on read side
+
+
+Normally reads and writes are always sent to all `n` replicas in parallel -- `w` and `r` determine how many node we wait for
+
+
+#### Limitations of Quorum Consistency
+
+There are edge-cases that even with `w + r > n` formula, Quorum Consistency still may not hold.
+
+- If a sloppy quorum is used (what is a sloppy quorum?)
+
+- If two writes occur concurrently (not clear which one happened first, and therefore, need to merge the concurrent writes).
+
+- If a write happens concurrently with a read.
+
+- If a write succeeded on some replicas but failed on others, and overall succeeded on fewer than `w` replicas.
+
+- If a node carrying a new value fails and restore from a replica with old value. (result in number of replicas with newer value may fall below `w`)
+
+
+Note: Quorum Consistency practically is not easy to achieve, and better to treat the formula as a tuning on probablity of stale values being read, instead of an absolute guarantees.
+
+
+#### Monitoring Staleness
+
+ 
+
+### Sloppy Quorums and Hinted Handoff
+
+Situation: trade-off on should return errors to all requests that cannot reach a quorum, or should we accepts writes but write into some nodes that are not the designated n "home" nodes for the write value.
+
+**Sloppy Quorum**: Writes and reads still require `w` and `r` successfully responses, but those may include nodes that are not among the designated n "home" nodes for a value.
+
+**Hinted handoff**: nodes that temporarilly accepting writes send values to the appropriated "home" nodes once they back online.
+
+- Cons: increasing write availability
+
+#### Multi-datacenter operation
+
+
+### Detecting Concurrent Writes
+
+Concurrent writes issue in Dynamo-style DB: clients concurrently write to the same key, but nodes recieving write requests in different orders. This could result permanently inconsistent DB.
+
+Solutions:
+
+#### Last write wins (LWW) (Discarding concurrent writes)
+
+Force an **arbitrary oder** on concurrent writes. E.g. attach a timestamp to each write, let the one with biggest timestamp "wins".
+
+- Pros: achieves eventual convergence
+
+- Cons: lost durability -- for several concurrent writes to the same key, even if they were all reported as success to clients, only one of them will persist in the DB.
+
+
+#### The "happens-before" relationship and concurrency (how to decide if conccurent writes occurs)
+
+**Casual dependency**: An opperation A happens before another operation B, if B knows about A, or depends on A, or builds upon A in some way.
 
 
 
