@@ -10,7 +10,8 @@
 - Common Domain-specific Data Structures
   - Union Find
   - Trie Tree
-  - Bloom Filter
+  - Bloom Filter (De dup, seen state, probability based)
+  - Sliding Window (Aggregation)
 
 - Java Common Collections
   - HashMap, TreeMap
