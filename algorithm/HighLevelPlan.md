@@ -5,7 +5,7 @@
   - Hash Table
   - Stack
   - Queue
-  - TODO: Heap
+  - Heap (Priority Queue)
   - sorting algorithms
 - Common Domain-specific Data Structures
   - Union Find
