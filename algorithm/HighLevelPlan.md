@@ -7,6 +7,10 @@
   - Queue
   - TODO: Heap
   - sorting algorithms
+- Common Domain-specific Data Structures
+  - Union Find
+  - Trie Tree
+  - Bloom Filter
 
 - Java Common Collections
   - HashMap, TreeMap
