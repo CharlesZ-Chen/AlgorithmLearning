@@ -83,3 +83,7 @@ Find(x):
 Union(s1, s2):
   f[s1] = s2
 ```
+
+#### Advanced Application
+
+- Weighted Union Find: https://leetcode.com/problems/evaluate-division/
